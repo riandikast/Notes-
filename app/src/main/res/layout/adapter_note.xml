@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+
+        android:layout_width="match_parent"
+
+        android:layout_marginBottom="5dp"
+        android:layout_height="55dp">
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+
+                android:text="ssssssssssss"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:id="@+id/notejudul"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:layout_below="@id/notejudul"
+                android:text="ssssssssssss"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:id="@+id/notetext"
+                android:layout_width="280dp"
+                android:layout_height="55dp">
+
+            </TextView>
+
+
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="35dp"
+
+                android:layout_toRightOf="@+id/notejudul"
+                android:src="@drawable/edit"
+                android:id="@+id/noteedit"
+                android:layout_width="25dp"
+                android:layout_height="25dp">
+
+            </ImageView>
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10dp"
+
+                android:layout_toRightOf="@+id/noteedit"
+                android:src="@drawable/delete"
+                android:id="@+id/notedelete"
+                android:layout_width="25dp"
+                android:layout_height="25dp">
+
+            </ImageView>
+
+
+        </RelativeLayout>
+
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
