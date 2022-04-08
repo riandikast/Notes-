@@ -149,9 +149,7 @@ class HomeFragment : Fragment() {
         }
 
         view.add.setOnClickListener {
-
             val custom = LayoutInflater.from(requireContext()).inflate(R.layout.input_dialog, null)
-
             val a = AlertDialog.Builder(requireContext())
                 .setView(custom)
                 .create()

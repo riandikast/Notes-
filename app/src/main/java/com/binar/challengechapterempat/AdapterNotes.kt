@@ -1,6 +1,8 @@
 package com.binar.challengechapterempat
 
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +23,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 
 data class AdapterNotes(var listdata: List<Notes>): RecyclerView.Adapter<AdapterNotes.ViewHolder>(){
+
     class ViewHolder(itemView : View): RecyclerView.ViewHolder(itemView) {
 
     }
@@ -56,10 +59,11 @@ data class AdapterNotes(var listdata: List<Notes>): RecyclerView.Adapter<Adapter
 
                 GlobalScope.async {
                     val hasil =  db?.NotesDao()?.deleteNotes(listdata[position])
+
                     (holder.itemView.context as MainActivity).runOnUiThread {
                         if (hasil !=0){
                             Toast.makeText(it.context, "Catatan dengan judul ${listdata[position].judul} berhasil di hapus", Toast.LENGTH_LONG).show()
-                            (custom.context as MainActivity)
+                            (custom.context as MainActivity).recreate()
                         }else{
                             Toast.makeText(it.context, "Catatan dengan judul ${listdata[position].judul} gagal di hapus", Toast.LENGTH_LONG).show()
                         }
@@ -84,6 +88,9 @@ data class AdapterNotes(var listdata: List<Notes>): RecyclerView.Adapter<Adapter
 
             var judul = listdata[position].judul
             var isi = listdata[position].isi
+            var id = listdata[position].id
+            var email = listdata[position].email
+
 
             custom.editjudul.setText(judul)
             custom.editcatatan.setText(isi)
@@ -92,20 +99,17 @@ data class AdapterNotes(var listdata: List<Notes>): RecyclerView.Adapter<Adapter
             custom.editcatatan.setSelection(custom.editcatatan.length())
 
             custom.btnedit.setOnClickListener {
-                var id = listdata[position].id
-                var email = listdata[position].email
+
+
                 judul = custom.editjudul.text.toString()
                 isi = custom.editcatatan.text.toString()
 
-
-
                 GlobalScope.async {
                     val hasil =  db?.NotesDao()?.updateNotes(Notes(id,judul,isi,email))
-
                     (holder.itemView.context as MainActivity).runOnUiThread {
                         if (hasil !=0){
                             Toast.makeText(it.context, "Data ${listdata[position].judul} berhasil di update", Toast.LENGTH_LONG).show()
-                            (custom.context as MainActivity)
+                            (custom.context as MainActivity).recreate()
                         }else{
                             Toast.makeText(it.context, "Data ${listdata[position].judul} gagal di update", Toast.LENGTH_LONG).show()
                         }
