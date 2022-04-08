@@ -46,9 +46,8 @@ class SplashScreen : Fragment() {
         Handler().postDelayed({
 
 
-            if ((requireContext().getSharedPreferences("login", Context.MODE_PRIVATE).contains("loginemail"))
-                &&(requireContext().getSharedPreferences("login", Context.MODE_PRIVATE).contains("loginpassword"))
-                &&(requireContext().getSharedPreferences("login", Context.MODE_PRIVATE).contains("login_state")))
+            if (
+                (requireContext().getSharedPreferences("login", Context.MODE_PRIVATE).contains("login_state")))
             {
                 view.findNavController().navigate(R.id.action_splashScreen_to_homeFragment2)
 
