@@ -59,7 +59,7 @@ data class AdapterNotes(var listdata: List<Notes>): RecyclerView.Adapter<Adapter
                     (holder.itemView.context as MainActivity).runOnUiThread {
                         if (hasil !=0){
                             Toast.makeText(it.context, "Catatan dengan judul ${listdata[position].judul} berhasil di hapus", Toast.LENGTH_LONG).show()
-                            (custom.context as MainActivity).recreate()
+                            (custom.context as MainActivity)
                         }else{
                             Toast.makeText(it.context, "Catatan dengan judul ${listdata[position].judul} gagal di hapus", Toast.LENGTH_LONG).show()
                         }
@@ -93,18 +93,19 @@ data class AdapterNotes(var listdata: List<Notes>): RecyclerView.Adapter<Adapter
 
             custom.btnedit.setOnClickListener {
                 var id = listdata[position].id
+                var email = listdata[position].email
                 judul = custom.editjudul.text.toString()
                 isi = custom.editcatatan.text.toString()
 
 
 
                 GlobalScope.async {
-                    val hasil =  db?.NotesDao()?.updateNotes(Notes(id,judul,isi))
+                    val hasil =  db?.NotesDao()?.updateNotes(Notes(id,judul,isi,email))
 
                     (holder.itemView.context as MainActivity).runOnUiThread {
                         if (hasil !=0){
                             Toast.makeText(it.context, "Data ${listdata[position].judul} berhasil di update", Toast.LENGTH_LONG).show()
-                            (custom.context as MainActivity).recreate()
+                            (custom.context as MainActivity)
                         }else{
                             Toast.makeText(it.context, "Data ${listdata[position].judul} gagal di update", Toast.LENGTH_LONG).show()
                         }
@@ -132,6 +133,7 @@ data class AdapterNotes(var listdata: List<Notes>): RecyclerView.Adapter<Adapter
     }
 
     override fun getItemCount(): Int {
+
 
         return listdata.size
     }

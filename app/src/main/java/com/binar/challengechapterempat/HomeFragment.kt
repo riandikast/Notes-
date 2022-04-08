@@ -3,6 +3,7 @@ package com.binar.challengechapterempat
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,9 +45,10 @@ class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
-    lateinit var home : SharedPreferences
-    var db : NotesDB?=null
+    private lateinit var email: String
+    private lateinit var user: User
+    lateinit var home: SharedPreferences
+    var db: NotesDB? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,29 +65,32 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
 
 
-
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         home = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
 
-        val username = home.getString("username", "")
-        view.welcome.text = "Welcome " +username
+//        val username = home.getString("username", "")
 
+        val email = home.getString("regisemail", "").toString()
+        GlobalScope.async {
+            val user = db?.NotesDao()?.getUserRegis(email)
+            val username = user?.nama
+            view.welcome.text = "Welcome " + username
+            Log.d("wwwwwwwwww",email.toString())
+        }
         db = NotesDB.getInstance(requireContext())
-
-
-
-
-
-
-        view.list.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
+        view.list.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         GlobalScope.launch {
-            val listdata = db?.NotesDao()?.getAllNote()
 
+//            val user = db?.NotesDao()?.getUserRegis(email)
+
+            val listdata = db?.NotesDao()?.getNoteAcc(email)
+            Log.d ("www", listdata.toString())
             requireActivity().runOnUiThread {
                 listdata.let {
-                    if (listdata?.size == 0){
+                    if (listdata?.size == 0) {
                         checkdata.text = "Belum ada catatan"
                     }
 
@@ -95,12 +100,6 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-
-
-
-
-
-
 
         view.logout.setOnClickListener {
             val custom = LayoutInflater.from(requireContext()).inflate(R.layout.logout_dialog, null)
@@ -113,7 +112,7 @@ class HomeFragment : Fragment() {
             }
 
             custom.btnlogoutya.setOnClickListener {
-                val logout =  home.edit()
+                val logout = home.edit()
 
                 for (key in home.all.keys) {
                     if (key.startsWith("login_state")) {
@@ -137,7 +136,10 @@ class HomeFragment : Fragment() {
                 logout.commit()
 
                 GlobalScope.async {
-                    db?.NotesDao()?.deleteAllNote()
+                    val user = db?.NotesDao()?.getUserRegis(email)
+                    if (user != null) {
+                        db?.NotesDao()?.deleteacc(user)
+                    }
                 }
 
                 a.dismiss()
@@ -161,12 +163,12 @@ class HomeFragment : Fragment() {
                     val judul = custom.judul.text.toString()
                     val isi = custom.catatan.text.toString()
 
-                    val hasil = db?.NotesDao()?.insertNote(Notes(null, judul,isi))
+                    val hasil = db?.NotesDao()?.insertNote(Notes(null, judul, isi, email))
 
-                    requireActivity().runOnUiThread{
-                        if (hasil !=0.toLong()){
+                    requireActivity().runOnUiThread {
+                        if (hasil != 0.toLong()) {
                             Toast.makeText(requireContext(), "Berhasil", Toast.LENGTH_LONG).show()
-                        }else{
+                        } else {
                             Toast.makeText(requireContext(), "Gagal", Toast.LENGTH_LONG).show()
                         }
                     }
@@ -188,7 +190,6 @@ class HomeFragment : Fragment() {
     }
 
 
-
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -198,6 +199,10 @@ class HomeFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment HomeFragment.
          */
+
+        const val PREF_USER = "user_preference"
+        const val EMAIL = "email"
+
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

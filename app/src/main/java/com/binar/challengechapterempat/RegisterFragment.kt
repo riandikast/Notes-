@@ -14,9 +14,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.binar.challengechapterempat.R
 import kotlinx.android.synthetic.main.fragment_register.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import java.util.regex.Pattern
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,11 +33,12 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class RegisterFragment : Fragment() {
+    private lateinit var email : String
     lateinit var get : SharedPreferences
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    var db : NotesDB?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -50,24 +55,52 @@ class RegisterFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_register, container, false)
         val btnregis = view.findViewById<Button>(R.id.btnregis)
         get = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        db = NotesDB.getInstance(requireActivity())
         btnregis.setOnClickListener {
             val username = regisusername.text.toString()
-            val regis_email = regisemail.text.toString()
+            email = regisemail.text.toString()
             val regis_pass = regispassword.text.toString()
             val confirmpass = confirmpassword.text.toString()
+
 
             if (regisusername.text.isNotEmpty() && regisemail.text.isNotEmpty()
                 && regispassword.text.isNotEmpty()
                 && confirmpassword.text.isNotEmpty() ){
 
                 if (regis_pass == confirmpass){
+
                     val edit = get.edit()
                     edit.putString("username", username)
-                    edit.putString("regisemail", regis_email)
-                    edit.putString("regispassword", regis_pass)
-
                     edit.apply()
-                    view.findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+
+                    GlobalScope.async {
+                        val user = db?.NotesDao()?.getUserRegis(email)
+                        if (user != null) {
+                            requireActivity().runOnUiThread {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "User dengan email ${user.email} sudah terdaftar",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }else{
+                            val regis = db?.NotesDao()?.registerUser(User(email, username, regis_pass))
+
+
+                            requireActivity().runOnUiThread{
+                                if (regis !=0.toLong()){
+                                    Toast.makeText(requireContext(), "Register Berhasil", Toast.LENGTH_LONG).show()
+                                }else{
+                                    Toast.makeText(requireContext(), " RegisterGagal", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                            view.findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+
+                        }
+
+                    }
+
+
 
                 }else{
                     val text = "Konfirmasi Password Tidak Sesuai"
@@ -107,23 +140,12 @@ class RegisterFragment : Fragment() {
         return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RegisterFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RegisterFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+
+
+
+
     }
-}
+
+
+
+
