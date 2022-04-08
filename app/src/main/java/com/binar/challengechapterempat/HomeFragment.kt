@@ -72,19 +72,20 @@ class HomeFragment : Fragment() {
 
 //        val username = home.getString("username", "")
 
-        val email = home.getString("regisemail", "").toString()
-        GlobalScope.async {
-            val user = db?.NotesDao()?.getUserRegis(email)
-            val username = user?.nama
-            view.welcome.text = "Welcome " + username
-            Log.d("wwwwwwwwww",email.toString())
-        }
+        var email = home.getString("regisemail", "").toString()
+
         db = NotesDB.getInstance(requireContext())
         view.list.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         GlobalScope.launch {
 
 //            val user = db?.NotesDao()?.getUserRegis(email)
+            GlobalScope.async {
+                val user = db?.NotesDao()?.getUserRegis(email)
+                val username = user?.nama
+                view.welcome.text = "Welcome " + username
+                Log.d("uuuuuuu", user.toString())
+            }
 
             val listdata = db?.NotesDao()?.getNoteAcc(email)
             Log.d ("www", listdata.toString())
@@ -160,7 +161,7 @@ class HomeFragment : Fragment() {
 
                     val judul = custom.judul.text.toString()
                     val isi = custom.catatan.text.toString()
-
+                    val user = db?.NotesDao()?.getUserRegis(email)
                     val hasil = db?.NotesDao()?.insertNote(Notes(null, judul, isi, email))
 
                     requireActivity().runOnUiThread {
