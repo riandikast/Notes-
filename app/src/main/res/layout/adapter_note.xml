@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:id="@+id/card"
         android:layout_marginBottom="5dp"
-        android:layout_height="55dp">
+        android:layout_height="85dp">
 
         <RelativeLayout
 
@@ -17,7 +17,8 @@
             android:layout_height="wrap_content">
 
             <TextView
-
+                android:layout_marginTop="10dp"
+                android:singleLine="true"
                 android:text="ssssssssssss"
                 android:textSize="20sp"
                 android:textColor="@color/black"

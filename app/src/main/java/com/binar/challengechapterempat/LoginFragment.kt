@@ -99,6 +99,7 @@ class LoginFragment : Fragment() {
                                 view.findNavController()
                                     .navigate(R.id.action_loginFragment_to_homeFragment)
 
+
                             }
 
                         else {

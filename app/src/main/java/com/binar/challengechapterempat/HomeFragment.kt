@@ -29,10 +29,7 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.input_dialog.*
 import kotlinx.android.synthetic.main.input_dialog.view.*
 import kotlinx.android.synthetic.main.logout_dialog.view.*
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -82,6 +79,7 @@ class HomeFragment : Fragment() {
             email = it
             GlobalScope.launch {
                 val listdata = db?.NotesDao()?.getNoteAcc(email)
+
                 requireActivity().runOnUiThread {
                     listdata.let { it ->
                         if (listdata?.size == 0) {

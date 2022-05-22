@@ -20,10 +20,13 @@
         <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/adapter_note.xml" value="0.17798913043478262" />
         <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/delete_dialog.xml" value="0.1838768115942029" />
         <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/edit_dialog.xml" value="0.17798913043478262" />
-        <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/fragment_detail.xml" value="0.16" />
-        <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/fragment_detail.xml" value="0.2" />
+        <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/fragment_home.xml" value="0.16" />
         <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/fragment_input_dialog.xml" value="0.15579710144927536" />
-        <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/fragment_profile.xml" value="0.17572463768115942" />
+        <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/fragment_login.xml" value="0.17572463768115942" />
+        <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/fragment_logout_dialog.xml" value="0.17527173913043478" />
+        <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/fragment_profile.xml" value="0.2" />
+        <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/fragment_register.xml" value="0.1921875" />
         <entry key="..\:/AndroidProject/Notesss/app/src/main/res/layout/input_dialog.xml" value="0.17798913043478262" />
       </map>
     </option>

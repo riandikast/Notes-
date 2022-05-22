@@ -37,19 +37,18 @@
 
 
                     <TextView
+                        android:layout_below="@+id/text1n"
+                        android:layout_margin="40dp"
                         android:id="@+id/text2n"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="60dp"
 
-                        android:text="Isi"
+
+
+                        android:text="Isiaaaaaaaaaaaaaa"
                         android:textSize="22sp">
 
                     </TextView>
-
-
-
 
 
                     <TextView
@@ -58,7 +57,7 @@
 
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_margin="30dp"
+
                         android:layout_marginTop="10dp"
                         android:text="Judul"
                         android:textSize="22sp">
@@ -84,7 +83,8 @@
             android:id="@+id/btnedita"
             android:layout_marginBottom="30dp"
             android:layout_marginRight="25dp"
-            app:tint="@null"
+            android:backgroundTint="@color/brown"
+            app:tint="@color/black"
             android:layout_toLeftOf="@+id/btnshare"
             android:layout_alignParentBottom="true"
             android:src="@drawable/edit"
@@ -97,7 +97,8 @@
             android:id="@+id/btnshare"
             android:layout_marginBottom="30dp"
             android:layout_marginRight="25dp"
-            app:tint="@null"
+            android:backgroundTint="@color/brown"
+            app:tint="@color/black"
             android:layout_toLeftOf="@+id/btndelete"
             android:layout_alignParentBottom="true"
             android:src="@drawable/share"
@@ -109,7 +110,8 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btndelete"
             android:layout_marginBottom="30dp"
-            app:tint="@null"
+            android:backgroundTint="@color/brown"
+            app:tint="@color/black"
             android:layout_marginRight="25dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
