@@ -57,6 +57,7 @@ class DetailFragment : Fragment() {
         val current = LocalDateTime.now()
         val format = current.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
 
+
         if (getnotes != null) {
             view.text1n.text = getnotes.judul
             view.text2n.text = getnotes.isi

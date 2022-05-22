@@ -1,5 +1,6 @@
 package com.binar.challengechapterempat
 
+import UserManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.threetenabp.AndroidThreeTen
@@ -23,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_logout_dialog.*
 import kotlinx.android.synthetic.main.fragment_logout_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_logout_dialog.view.btnlogouttidak
 import kotlinx.android.synthetic.main.fragment_logout_dialog.view.btnlogoutya
+import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.input_dialog.*
 import kotlinx.android.synthetic.main.input_dialog.view.*
 import kotlinx.android.synthetic.main.logout_dialog.view.*
@@ -52,6 +55,7 @@ class HomeFragment : Fragment() {
     private lateinit var email: String
     private lateinit var user: User
     lateinit var adapterNote : AdapterNotes
+    lateinit var userManager: UserManager
     lateinit var home: SharedPreferences
     var db: NotesDB? = null
 
@@ -73,9 +77,32 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        home = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        userManager = UserManager(requireContext())
+        userManager.userEmail.asLiveData().observe(requireActivity()){
+            email = it
+            GlobalScope.launch {
+                val listdata = db?.NotesDao()?.getNoteAcc(email)
+                requireActivity().runOnUiThread {
+                    listdata.let { it ->
+                        if (listdata?.size == 0) {
+                            checkdata.text = "Belum ada catatan"
+                        }
+                        adapterNote = AdapterNotes(){
+                            val bund = Bundle()
+                            bund.putParcelable("detailnote", it)
+                            view.findNavController().navigate(R.id.action_homeFragment_to_detailFragment,bund)
+                        }
+                        adapterNote.setData(it!!)
+
+                        list?.adapter = adapterNote
+
+                    }
+                }
+            }
 
 
+
+        }
         AndroidThreeTen.init(requireContext())
         val current = LocalDateTime.now()
         val format = current.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
@@ -88,30 +115,13 @@ class HomeFragment : Fragment() {
         GlobalScope.launch {
 
 
-            GlobalScope.async {
-                val user = db?.NotesDao()?.getUserRegis(email)
+//            GlobalScope.async {
+//                val user = db?.NotesDao()?.getUserRegis(email)
+//
+//
+//            }
 
 
-            }
-
-            val listdata = db?.NotesDao()?.getNoteAcc(email)
-
-            requireActivity().runOnUiThread {
-                listdata.let { it ->
-                    if (listdata?.size == 0) {
-                        checkdata.text = "Belum ada catatan"
-                    }
-                    adapterNote = AdapterNotes(){
-                        val bund = Bundle()
-                        bund.putParcelable("detailnote", it)
-                        view.findNavController().navigate(R.id.action_homeFragment_to_detailFragment,bund)
-                    }
-                    adapterNote.setData(it!!)
-
-                    list?.adapter = adapterNote
-
-                }
-            }
         }
 
         view.profile.setOnClickListener{
@@ -132,7 +142,7 @@ class HomeFragment : Fragment() {
 
                     val judul = custom.judul.text.toString()
                     val isi = custom.catatan.text.toString()
-                    val user = db?.NotesDao()?.getUserRegis(email)
+//                    val user = db?.NotesDao()?.getUserRegis(email)
                     val hasil = db?.NotesDao()?.insertNote(Notes(null, judul, isi, email, format.toString()))
 
                     requireActivity().runOnUiThread {
