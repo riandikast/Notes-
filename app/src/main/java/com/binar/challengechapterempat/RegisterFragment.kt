@@ -76,7 +76,7 @@ class RegisterFragment : Fragment() {
                             requireActivity().runOnUiThread {
                                 Toast.makeText(
                                     requireContext(),
-                                    "User dengan email  sudah terdaftar",
+                                    "User dengan email $email sudah terdaftar",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
