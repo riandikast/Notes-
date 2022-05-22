@@ -1,7 +1,9 @@
 package com.binar.challengechapterempat
 
 import UserManager
+import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,7 +49,7 @@ class DetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_detail, container, false)
-        val getnotes = arguments?.getParcelable<Notes>("detailnote")
+        val getnotes = arguments?.getParcelable<Notes>("detailnote") as Notes
         userManager = UserManager(requireContext())
 
         if (getnotes != null) {
@@ -57,12 +59,11 @@ class DetailFragment : Fragment() {
         }
 
         view.btnshare.setOnClickListener{
-//            val intent= Intent()
-//            intent.action=Intent.ACTION_SEND
-//            intent.putExtra(Intent.EXTRA_TEXT,"Hey Check out this Great app:")
-//            intentplain"
-//            startActivity(Intent.createChooser(intent,"Share To:"))
-//
+            val intent= Intent()
+            intent.action=Intent.ACTION_SEND
+            intent.putExtra(Intent.EXTRA_TEXT, getnotes.isi)
+            intent.type="text/plain"
+            startActivity(Intent.createChooser(intent,"Share To:"))
         }
 
         view.btndelete.setOnClickListener{
