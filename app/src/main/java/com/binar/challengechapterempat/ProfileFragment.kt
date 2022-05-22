@@ -1,18 +1,17 @@
 package com.binar.challengechapterempat
 
 import UserManager
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
+
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.asLiveData
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import com.binar.challengechapterempat.R
+import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,16 +20,14 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [SplashScreen.newInstance] factory method to
+ * Use the [ProfileFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SplashScreen : Fragment() {
+class ProfileFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    lateinit var splash : SharedPreferences
-    lateinit var userManager : UserManager
     private var param1: String? = null
     private var param2: String? = null
-
+    lateinit var userManager : UserManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -44,42 +41,24 @@ class SplashScreen : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_splash_screen, container, false)
+        val view = inflater.inflate(R.layout.fragment_profile, container, false)
         userManager = UserManager(requireContext())
 
-        Handler().postDelayed({
-
-
-            userManager.userLogin.asLiveData().observe(requireActivity()) {
-                if (it.equals("true")) {
-                    view.findNavController().navigate(
-                        R.id.action_splashScreen_to_homeFragment2, null,
-                        NavOptions.Builder()
-                            .setPopUpTo(
-                                R.id.splashScreen,
-                                true
-                            ).build()
-                    )
-
-                } else if (it.equals("false")){
-                    view.findNavController().navigate(
-                        R.id.action_splashScreen_to_loginFragment, null,
-                        NavOptions.Builder()
-                            .setPopUpTo(
-                                R.id.splashScreen,
-                                true
-                            ).build()
-                    )
-                }
+        userManager.userUsername.asLiveData().observe(requireActivity()){
+            view.username.setText(it)
+        }
+        userManager.userEmail.asLiveData().observe(requireActivity()){
+            view.email.setText(it)
+        }
+        view.btnlogout.setOnClickListener {
+            GlobalScope.launch {
+                userManager.deleteDataLogin()
             }
+            view.findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
 
-
-
-        }, 2000)
-
-
-
+        }
         return view
+
     }
 
     companion object {
@@ -89,12 +68,12 @@ class SplashScreen : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment SplashScreen.
+         * @return A new instance of fragment ProfileFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            SplashScreen().apply {
+            ProfileFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

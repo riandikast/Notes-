@@ -27,8 +27,14 @@ interface NotesDao {
     @Query("SELECT * FROM Notes WHERE Notes.email = :email")
     fun getNoteAcc(email: String) : List<Notes>
 
+    @Query("DELETE FROM Notes WHERE Notes.id = :id")
+    fun deleteNoteCustom(id: String) : Int
+
     @Query("SELECT * FROM User WHERE User.email = :email")
-    fun getUserRegis(email:String): User
+    fun getUserRegis(email:String): List<User>
+
+    @Query("SELECT * FROM User WHERE User.email = :email")
+    fun getUser(email:String): User
 
 
 

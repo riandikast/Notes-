@@ -21,8 +21,20 @@ import kotlinx.android.synthetic.main.fragment_logout_dialog.view.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import org.threeten.bp.LocalDateTime;
 
-data class AdapterNotes(var listdata: List<Notes>): RecyclerView.Adapter<AdapterNotes.ViewHolder>(){
+data class AdapterNotes(private val onclick : (Notes)->Unit): RecyclerView.Adapter<AdapterNotes.ViewHolder>(){
+    var datanote : List<Notes>? = null
+    val current = LocalDateTime.now()
+
+    fun setData(note : List<Notes>){
+        this.datanote = note
+    }
+
+
+
+
+
 
     class ViewHolder(itemView : View): RecyclerView.ViewHolder(itemView) {
 
@@ -34,112 +46,28 @@ data class AdapterNotes(var listdata: List<Notes>): RecyclerView.Adapter<Adapter
         return  ViewHolder(viewitem)
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
 
-        holder.itemView.notejudul.text = listdata[position].judul
-        holder.itemView.notetext.text = listdata[position].isi
-
-        holder.itemView.notedelete.setOnClickListener {
-            db = NotesDB.getInstance(it.context)
-            val custom = LayoutInflater.from(it.context).inflate(R.layout.delete_dialog, null)
-            val a = androidx.appcompat.app.AlertDialog.Builder(it.context)
-                .setView(custom)
-                .create()
-
-            custom.btnhapustidak.setOnClickListener {
-                a.dismiss()
-            }
-
-            custom.btnhapusya.setOnClickListener {
-
-
-
-                GlobalScope.async {
-                    val hasil =  db?.NotesDao()?.deleteNotes(listdata[position])
-
-                    (holder.itemView.context as MainActivity).runOnUiThread {
-                        if (hasil !=0){
-                            Toast.makeText(it.context, "Catatan dengan judul ${listdata[position].judul} berhasil di hapus", Toast.LENGTH_LONG).show()
-                            (custom.context as MainActivity).recreate()
-                        }else{
-                            Toast.makeText(it.context, "Catatan dengan judul ${listdata[position].judul} gagal di hapus", Toast.LENGTH_LONG).show()
-                        }
-
-                        (holder.itemView.context as MainActivity).getdata()
-
-                    }
-                }
-              a.dismiss()
-
-            }
-            a.show()
-
+        holder.itemView.notejudul.text = datanote!![position].judul
+        if (current == current){
+            holder.itemView.notetext.text = current.toString()
         }
 
-        holder.itemView.noteedit.setOnClickListener {
-            db = NotesDB.getInstance(it.context)
-            val custom = LayoutInflater.from(it.context).inflate(R.layout.edit_dialog, null)
-            val a = androidx.appcompat.app.AlertDialog.Builder(it.context)
-                .setView(custom)
-                .create()
-
-            var judul = listdata[position].judul
-            var isi = listdata[position].isi
-            var id = listdata[position].id
-            var email = listdata[position].email
-
-
-            custom.editjudul.setText(judul)
-            custom.editcatatan.setText(isi)
-
-            custom.editjudul.setSelection(custom.editjudul.length())
-            custom.editcatatan.setSelection(custom.editcatatan.length())
-
-            custom.btnedit.setOnClickListener {
-
-
-                judul = custom.editjudul.text.toString()
-                isi = custom.editcatatan.text.toString()
-
-                GlobalScope.async {
-                    val hasil =  db?.NotesDao()?.updateNotes(Notes(id,judul,isi,email))
-                    (holder.itemView.context as MainActivity).runOnUiThread {
-                        if (hasil !=0){
-                            Toast.makeText(it.context, "Data ${listdata[position].judul} berhasil di update", Toast.LENGTH_LONG).show()
-                            (custom.context as MainActivity).recreate()
-                        }else{
-                            Toast.makeText(it.context, "Data ${listdata[position].judul} gagal di update", Toast.LENGTH_LONG).show()
-                        }
-
-                        (holder.itemView.context as MainActivity).getdata()
-
-
-
-
-
-
-
-
-                    }
-                }
-
-
-
-                a.dismiss()
-
-            }
-            a.show()
+        holder.itemView.card.setOnClickListener {
+            onclick(datanote!![position])
 
         }
     }
 
     override fun getItemCount(): Int {
-
-
-        return listdata.size
+        if (datanote == null){
+            return 0
+        }else{
+            return datanote!!.size
+        }
     }
 }
 

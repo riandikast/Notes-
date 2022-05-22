@@ -1,5 +1,6 @@
 package com.binar.challengechapterempat
 
+import UserManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -16,10 +17,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.binar.challengechapterempat.R
+
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -38,8 +41,10 @@ class LoginFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     var db : NotesDB?=null
+    lateinit var dataUser : List<User>
     lateinit var email: String
     lateinit var password: String
+    lateinit var userManager : UserManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -59,7 +64,7 @@ class LoginFragment : Fragment() {
 
         send = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
         db = NotesDB.getInstance(requireActivity())
-
+        userManager = UserManager(requireContext())
 
         daftar.setOnClickListener {
             view.findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -68,49 +73,53 @@ class LoginFragment : Fragment() {
 
 
             if (loginemail.text.isNotEmpty() && loginpassword.text.isNotEmpty()){
-
                 email = loginemail.text.toString()
                 password = loginpassword.text.toString()
 
                 GlobalScope.async {
-
-                    val user = db?.NotesDao()?.getUserRegis(email)
+                    dataUser = db?.NotesDao()?.getUserRegis(email)!!
 
                     requireActivity().runOnUiThread {
 
+                        for (i in dataUser.indices) {
 
-//                    val email = send.getString("regisemail", email)
-//                val password = send.getString("regispassword", "")
+                            if (email == dataUser[i].email && password == dataUser[i].password) {
 
-//                val user = db?.NotesDao()?.getUserRegis("")
+                                GlobalScope.launch {
 
-                        if (email == user?.email && password == user.password) {
-                            val loginstate = "true"
-                            val sf = send.edit()
-                            sf.putString("regisemail", email)
-//                    sf.putString("loginpassword", login_password)
-                            sf.putString("login_state", loginstate)
-                            sf.apply()
-                            view.findNavController()
-                                .navigate(R.id.action_loginFragment_to_homeFragment)
+                                    userManager.saveDataLogin("true")
+                                    userManager.saveDataUser(
 
-                        } else {
-                            val text = "Email atau password salah!"
-                            val toast = Toast.makeText(
-                                requireActivity()?.getApplicationContext(),
-                                text,
-                                Toast.LENGTH_LONG
-                            )
-                            val text1 =
-                                toast.getView()?.findViewById(android.R.id.message) as TextView
-                            val toastView: View? = toast.getView()
-                            toastView?.setBackgroundColor(Color.TRANSPARENT)
-                            text1.setTextColor(Color.RED);
-                            text1.setTextSize(15F)
-                            toast.show()
-                            toast.setGravity(Gravity.CENTER or Gravity.TOP, 0, 960)
+                                        dataUser[i].email,
+                                        dataUser[i].password,
+                                        dataUser[i].nama
 
-                        }
+                                    )
+                                }
+                                view.findNavController()
+                                    .navigate(R.id.action_loginFragment_to_homeFragment)
+
+                            }
+
+                        else {
+                        val text = "Email atau password salah!"
+                        val toast = Toast.makeText(
+                            requireActivity()?.getApplicationContext(),
+                            text,
+                            Toast.LENGTH_LONG
+                        )
+                        val text1 =
+                            toast.getView()?.findViewById(android.R.id.message) as TextView
+                        val toastView: View? = toast.getView()
+                        toastView?.setBackgroundColor(Color.TRANSPARENT)
+                        text1.setTextColor(Color.RED);
+                        text1.setTextSize(15F)
+                        toast.show()
+                        toast.setGravity(Gravity.CENTER or Gravity.TOP, 0, 960)
+
+                    }}
+
+
                     }
                     }
             }

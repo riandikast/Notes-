@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="">
+
+                </TextView>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <TextView
+                        android:id="@+id/text2n"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="60dp"
+
+                        android:text="Isi"
+                        android:textSize="22sp">
+
+                    </TextView>
+
+
+
+
+
+                    <TextView
+                        android:id="@+id/text1n"
+                        android:layout_width="wrap_content"
+
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="30dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Judul"
+                        android:textSize="22sp">
+
+                    </TextView>
+
+
+                </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/btnadd"
+                android:src="@drawable/add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </ImageView>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnedita"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="25dp"
+            app:tint="@null"
+            android:layout_toLeftOf="@+id/btnshare"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/edit"
+            app:maxImageSize="35dp"
+            app:fabCustomSize= "80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnshare"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="25dp"
+            app:tint="@null"
+            android:layout_toLeftOf="@+id/btndelete"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/share"
+            app:maxImageSize="35dp"
+            app:fabCustomSize= "80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btndelete"
+            android:layout_marginBottom="30dp"
+            app:tint="@null"
+            android:layout_marginRight="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/delete"
+            app:maxImageSize="35dp"
+            app:fabCustomSize= "80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    </RelativeLayout>
+
+</LinearLayout>

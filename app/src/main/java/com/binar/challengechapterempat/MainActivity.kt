@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
             runOnUiThread {
                 listdata.let {
-                    val adapt = AdapterNotes(it!!)
+                    val adapt = AdapterNotes(){}
                     list.adapter = adapt
                 }
             }

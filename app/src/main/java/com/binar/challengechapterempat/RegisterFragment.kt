@@ -69,17 +69,14 @@ class RegisterFragment : Fragment() {
 
                 if (regis_pass == confirmpass){
 
-                    val edit = get.edit()
-                    edit.putString("username", username)
-                    edit.apply()
 
                     GlobalScope.async {
-                        val user = db?.NotesDao()?.getUserRegis(email)
+                        val user = db?.NotesDao()?.getUser(email)
                         if (user != null) {
                             requireActivity().runOnUiThread {
                                 Toast.makeText(
                                     requireContext(),
-                                    "User dengan email ${user.email} sudah terdaftar",
+                                    "User dengan email  sudah terdaftar",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }

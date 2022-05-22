@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.android.synthetic.main.delete_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -47,6 +48,7 @@ class HomeFragment : Fragment() {
     private var param2: String? = null
     private lateinit var email: String
     private lateinit var user: User
+    lateinit var adapterNote : AdapterNotes
     lateinit var home: SharedPreferences
     var db: NotesDB? = null
 
@@ -73,7 +75,7 @@ class HomeFragment : Fragment() {
 //        val username = home.getString("username", "")
 
         var email = home.getString("regisemail", "").toString()
-
+        AndroidThreeTen.init(requireContext())
         db = NotesDB.getInstance(requireContext())
         view.list.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -82,72 +84,36 @@ class HomeFragment : Fragment() {
 //            val user = db?.NotesDao()?.getUserRegis(email)
             GlobalScope.async {
                 val user = db?.NotesDao()?.getUserRegis(email)
-                val username = user?.nama
-                view.welcome.text = "Welcome " + username
-                Log.d("uuuuuuu", user.toString())
+//                val username = user?.nama
+//                view.welcome.text = "Welcome " + username
+
             }
 
             val listdata = db?.NotesDao()?.getNoteAcc(email)
-            Log.d ("www", listdata.toString())
+
             requireActivity().runOnUiThread {
-                listdata.let {
+                listdata.let { it ->
                     if (listdata?.size == 0) {
                         checkdata.text = "Belum ada catatan"
                     }
+                    adapterNote = AdapterNotes(){
+                        val bund = Bundle()
+                        bund.putParcelable("detailnote", it)
+                        view.findNavController().navigate(R.id.action_homeFragment_to_detailFragment,bund)
+                    }
+                    adapterNote.setData(it!!)
 
-                    val adapt = AdapterNotes(it!!)
-                    list?.adapter = adapt
+                    list?.adapter = adapterNote
 
                 }
             }
         }
 
-        view.logout.setOnClickListener {
-            val custom = LayoutInflater.from(requireContext()).inflate(R.layout.logout_dialog, null)
-            val a = AlertDialog.Builder(requireContext())
-                .setView(custom)
-                .create()
-            custom.btnlogouttidak.setOnClickListener {
-
-                a.dismiss()
-            }
-
-            custom.btnlogoutya.setOnClickListener {
-                val logout = home.edit()
-
-                for (key in home.all.keys) {
-                    if (key.startsWith("login_state")) {
-                        logout.remove(key)
-                    }
-                }
-                logout.commit()
-
-                a.dismiss()
-                view.findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-            }
-            custom.deleteacc.setOnClickListener {
-                val logout =  home.edit()
-                logout.clear()
-                logout.apply()
-                for (key in home.all.keys) {
-                    if (key.startsWith("login_state")) {
-                        logout.remove(key)
-                    }
-                }
-                logout.commit()
-
-                GlobalScope.async {
-                    val user = db?.NotesDao()?.getUserRegis(email)
-                    if (user != null) {
-                        db?.NotesDao()?.deleteacc(user)
-                    }
-                }
-
-                a.dismiss()
-                view.findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-            }
-            a.show()
+        view.profile.setOnClickListener{
+            view.findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
         }
+
+
 
         view.add.setOnClickListener {
             val custom = LayoutInflater.from(requireContext()).inflate(R.layout.input_dialog, null)
