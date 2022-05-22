@@ -18,6 +18,9 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,6 +54,8 @@ class DetailFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_detail, container, false)
         val getnotes = arguments?.getParcelable<Notes>("detailnote") as Notes
         userManager = UserManager(requireContext())
+        val current = LocalDateTime.now()
+        val format = current.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
 
         if (getnotes != null) {
             view.text1n.text = getnotes.judul
@@ -116,7 +121,7 @@ class DetailFragment : Fragment() {
                 isi = custom.editcatatan.text.toString()
 
                 GlobalScope.async {
-                     db?.NotesDao()?.updateNotes(Notes(id,judul,isi,email.toString()))
+                     db?.NotesDao()?.updateNotes(Notes(id,judul,isi,email, format.toString()))
 
 
                 }

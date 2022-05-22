@@ -19,6 +19,9 @@ data class Notes(
     var isi :String?,
 
     @ColumnInfo(name = "email")
-    var email: String
+    var email: String,
+
+    @ColumnInfo(name = "time")
+    var time: String
 
 ):Parcelable

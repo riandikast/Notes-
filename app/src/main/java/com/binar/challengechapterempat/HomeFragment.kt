@@ -30,6 +30,9 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -72,20 +75,22 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         home = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
 
-//        val username = home.getString("username", "")
 
-        var email = home.getString("regisemail", "").toString()
         AndroidThreeTen.init(requireContext())
+        val current = LocalDateTime.now()
+        val format = current.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+
         db = NotesDB.getInstance(requireContext())
         view.list.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        email =""
         GlobalScope.launch {
 
-//            val user = db?.NotesDao()?.getUserRegis(email)
+
             GlobalScope.async {
                 val user = db?.NotesDao()?.getUserRegis(email)
-//                val username = user?.nama
-//                view.welcome.text = "Welcome " + username
+
 
             }
 
@@ -128,7 +133,7 @@ class HomeFragment : Fragment() {
                     val judul = custom.judul.text.toString()
                     val isi = custom.catatan.text.toString()
                     val user = db?.NotesDao()?.getUserRegis(email)
-                    val hasil = db?.NotesDao()?.insertNote(Notes(null, judul, isi, email))
+                    val hasil = db?.NotesDao()?.insertNote(Notes(null, judul, isi, email, format.toString()))
 
                     requireActivity().runOnUiThread {
                         if (hasil != 0.toLong()) {

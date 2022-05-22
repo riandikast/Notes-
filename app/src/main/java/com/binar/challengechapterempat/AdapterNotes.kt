@@ -25,7 +25,7 @@ import org.threeten.bp.LocalDateTime;
 
 data class AdapterNotes(private val onclick : (Notes)->Unit): RecyclerView.Adapter<AdapterNotes.ViewHolder>(){
     var datanote : List<Notes>? = null
-    val current = LocalDateTime.now()
+
 
     fun setData(note : List<Notes>){
         this.datanote = note
@@ -52,9 +52,9 @@ data class AdapterNotes(private val onclick : (Notes)->Unit): RecyclerView.Adapt
 
 
         holder.itemView.notejudul.text = datanote!![position].judul
-        if (current == current){
-            holder.itemView.notetext.text = current.toString()
-        }
+
+            holder.itemView.notetext.text = datanote!![position].time
+
 
         holder.itemView.card.setOnClickListener {
             onclick(datanote!![position])
